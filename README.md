@@ -1,11 +1,8 @@
 ### EN.580.673 - MR in Medicine 
 ##### Class Notes, Spring 2016
 
-Prof: Daniel Herzka
+Profs: Daniel Herzka, Paul Bottomley
 
-Email:
+Email: daniel.herzka@jhu.edu, bottoml@mri.jhu.edu
 
-Office:
-
-Office Hours:
-
+Office: Ross Building Suite 726, Park Building 310
