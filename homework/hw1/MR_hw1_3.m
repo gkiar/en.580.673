@@ -21,18 +21,22 @@ end
 
 im = zeros(size(data));
 for i=1:size(data,3)
-    temp = fftshift(fft2(ifftshift(data(:,:,i))));
+    temp = ifftshift(fft2(fftshift(data(:,:,i))));
     im(:,:,1) = temp;
 end
 
 im_rss = zeros(size(im(:,:,1)));
 for i=1:size(im,1)
     for j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(abs(im(i,j,:)).^2));
+        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
     end
 end
 
 figure
-imagesc(im_rss); axis off
+subplot(1,2,1)
+imagesc(abs(im_rss)); axis off
 colormap(gray)
-caxis([(min(min(im_rss))/10) max(max(im_rss))])
+
+subplot(1,2,2)
+imagesc(angle(im_rss)); axis off
+colormap(gray)

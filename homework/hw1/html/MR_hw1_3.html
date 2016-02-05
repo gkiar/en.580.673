@@ -84,21 +84,25 @@ figure
 <span class="keyword">end</span>
 </pre><img vspace="5" hspace="5" src="MR_hw1_3_01.png" alt=""> <img vspace="5" hspace="5" src="MR_hw1_3_02.png" alt=""> <h2>part 2<a name="3"></a></h2><pre class="codeinput">im = zeros(size(data));
 <span class="keyword">for</span> i=1:size(data,3)
-    temp = fftshift(fft2(ifftshift(data(:,:,i))));
+    temp = ifftshift(fft2(fftshift(data(:,:,i))));
     im(:,:,1) = temp;
 <span class="keyword">end</span>
 
 im_rss = zeros(size(im(:,:,1)));
 <span class="keyword">for</span> i=1:size(im,1)
     <span class="keyword">for</span> j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(abs(im(i,j,:)).^2));
+        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 figure
-imagesc(im_rss); axis <span class="string">off</span>
+subplot(1,2,1)
+imagesc(abs(im_rss)); axis <span class="string">off</span>
 colormap(gray)
-caxis([(min(min(im_rss))/10) max(max(im_rss))])
+
+subplot(1,2,2)
+imagesc(angle(im_rss)); axis <span class="string">off</span>
+colormap(gray)
 </pre><img vspace="5" hspace="5" src="MR_hw1_3_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 clear all
@@ -124,21 +128,25 @@ end
 
 im = zeros(size(data));
 for i=1:size(data,3)
-    temp = fftshift(fft2(ifftshift(data(:,:,i))));
+    temp = ifftshift(fft2(fftshift(data(:,:,i))));
     im(:,:,1) = temp;
 end
 
 im_rss = zeros(size(im(:,:,1)));
 for i=1:size(im,1)
     for j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(abs(im(i,j,:)).^2));
+        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
     end
 end
 
 figure
-imagesc(im_rss); axis off
+subplot(1,2,1)
+imagesc(abs(im_rss)); axis off
 colormap(gray)
-caxis([(min(min(im_rss))/10) max(max(im_rss))])
+
+subplot(1,2,2)
+imagesc(angle(im_rss)); axis off
+colormap(gray)
 
 ##### SOURCE END #####
 --></body></html>
