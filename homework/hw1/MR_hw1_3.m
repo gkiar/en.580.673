@@ -19,19 +19,14 @@ end
 
 %% part 2
 
-im = ifftshift(fft2(fftshift(data)));
-im_rss = zeros(size(im(:,:,1)));
-for i=1:size(im,1)
-    for j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
-    end
-end
+im = fftshift(ifft2(ifftshift(data)));
+im_rss = sqrt(sum(abs(im).^2, 3));
 
 figure
-subplot(1,2,1)
-imagesc(abs(im_rss)); axis off
+subplot(2,1,1)
+imagesc(abs(im_rss)); axis off; axis equal
 colormap(gray)
 
-subplot(1,2,2)
-imagesc(angle(im_rss)); axis off
+subplot(2,1,2)
+imagesc(angle(im(:,:,1))); axis off; axis equal
 colormap(gray)

@@ -82,21 +82,16 @@ figure
     imagesc(angle(data(:,:,i)))
     colormap(gray); axis <span class="string">off</span>;
 <span class="keyword">end</span>
-</pre><img vspace="5" hspace="5" src="MR_hw1_3_01.png" alt=""> <img vspace="5" hspace="5" src="MR_hw1_3_02.png" alt=""> <h2>part 2<a name="3"></a></h2><pre class="codeinput">im = ifftshift(fft2(fftshift(data)));
-im_rss = zeros(size(im(:,:,1)));
-<span class="keyword">for</span> i=1:size(im,1)
-    <span class="keyword">for</span> j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
-    <span class="keyword">end</span>
-<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="MR_hw1_3_01.png" alt=""> <img vspace="5" hspace="5" src="MR_hw1_3_02.png" alt=""> <h2>part 2<a name="3"></a></h2><pre class="codeinput">im = fftshift(ifft2(ifftshift(data)));
+im_rss = sqrt(sum(abs(im).^2, 3));
 
 figure
-subplot(1,2,1)
-imagesc(abs(im_rss)); axis <span class="string">off</span>
+subplot(2,1,1)
+imagesc(abs(im_rss)); axis <span class="string">off</span>; axis <span class="string">equal</span>
 colormap(gray)
 
-subplot(1,2,2)
-imagesc(angle(im_rss)); axis <span class="string">off</span>
+subplot(2,1,2)
+imagesc(angle(im(:,:,1))); axis <span class="string">off</span>; axis <span class="string">equal</span>
 colormap(gray)
 </pre><img vspace="5" hspace="5" src="MR_hw1_3_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -121,21 +116,16 @@ end
 
 %% part 2
 
-im = ifftshift(fft2(fftshift(data)));
-im_rss = zeros(size(im(:,:,1)));
-for i=1:size(im,1)
-    for j=1:size(im,2)
-        im_rss(i,j) = sqrt(sum(im(i,j,:).^2));
-    end
-end
+im = fftshift(ifft2(ifftshift(data)));
+im_rss = sqrt(sum(abs(im).^2, 3));
 
 figure
-subplot(1,2,1)
-imagesc(abs(im_rss)); axis off
+subplot(2,1,1)
+imagesc(abs(im_rss)); axis off; axis equal
 colormap(gray)
 
-subplot(1,2,2)
-imagesc(angle(im_rss)); axis off
+subplot(2,1,2)
+imagesc(angle(im(:,:,1))); axis off; axis equal
 colormap(gray)
 
 ##### SOURCE END #####
