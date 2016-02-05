@@ -87,7 +87,7 @@ im_rss = sqrt(sum(abs(im).^2, 3));
 
 figure
 subplot(2,1,1)
-imagesc(abs(im_rss)); axis <span class="string">off</span>; axis <span class="string">equal</span>
+imagesc(log(im_rss+1)); axis <span class="string">off</span>; axis <span class="string">equal</span>
 colormap(gray)
 
 subplot(2,1,2)
@@ -121,7 +121,7 @@ im_rss = sqrt(sum(abs(im).^2, 3));
 
 figure
 subplot(2,1,1)
-imagesc(abs(im_rss)); axis off; axis equal
+imagesc(log(im_rss+1)); axis off; axis equal
 colormap(gray)
 
 subplot(2,1,2)
