@@ -82,12 +82,7 @@ figure
     imagesc(angle(data(:,:,i)))
     colormap(gray); axis <span class="string">off</span>;
 <span class="keyword">end</span>
-</pre><img vspace="5" hspace="5" src="MR_hw1_3_01.png" alt=""> <img vspace="5" hspace="5" src="MR_hw1_3_02.png" alt=""> <h2>part 2<a name="3"></a></h2><pre class="codeinput">im = zeros(size(data));
-<span class="keyword">for</span> i=1:size(data,3)
-    temp = ifftshift(fft2(fftshift(data(:,:,i))));
-    im(:,:,1) = temp;
-<span class="keyword">end</span>
-
+</pre><img vspace="5" hspace="5" src="MR_hw1_3_01.png" alt=""> <img vspace="5" hspace="5" src="MR_hw1_3_02.png" alt=""> <h2>part 2<a name="3"></a></h2><pre class="codeinput">im = ifftshift(fft2(fftshift(data)));
 im_rss = zeros(size(im(:,:,1)));
 <span class="keyword">for</span> i=1:size(im,1)
     <span class="keyword">for</span> j=1:size(im,2)
@@ -126,12 +121,7 @@ end
 
 %% part 2
 
-im = zeros(size(data));
-for i=1:size(data,3)
-    temp = ifftshift(fft2(fftshift(data(:,:,i))));
-    im(:,:,1) = temp;
-end
-
+im = ifftshift(fft2(fftshift(data)));
 im_rss = zeros(size(im(:,:,1)));
 for i=1:size(im,1)
     for j=1:size(im,2)

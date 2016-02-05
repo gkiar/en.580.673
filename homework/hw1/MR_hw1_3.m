@@ -19,12 +19,7 @@ end
 
 %% part 2
 
-im = zeros(size(data));
-for i=1:size(data,3)
-    temp = ifftshift(fft2(fftshift(data(:,:,i))));
-    im(:,:,1) = temp;
-end
-
+im = ifftshift(fft2(fftshift(data)));
 im_rss = zeros(size(im(:,:,1)));
 for i=1:size(im,1)
     for j=1:size(im,2)
