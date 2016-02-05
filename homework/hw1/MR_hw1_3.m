@@ -18,26 +18,21 @@ for i=1:size(data,3)
 end
 
 %% part 2
-IM = zeros(size(data(:,:,1)));
-for i=1:size(data,1)
-    for j=1:size(data,2)
-        IM(i,j) = sqrt(sum(abs(data(i,j,:)).^2));
+
+im = zeros(size(data));
+for i=1:size(data,3)
+    temp = fftshift(fft2(ifftshift(data(:,:,i))));
+    im(:,:,1) = temp;
+end
+
+im_rss = zeros(size(im(:,:,1)));
+for i=1:size(im,1)
+    for j=1:size(im,2)
+        im_rss(i,j) = sqrt(sum(abs(im(i,j,:)).^2));
     end
 end
 
-% h = fspecial('gaussian', 100, 0.1);
-% IM = imfilter(IM, h);
-
 figure
-subplot(1,3,1)
-imagesc(log(IM + 1)); axis off
-
-IM = ifftshift(IM);
-im = ifft2(IM);
-im = fftshift(im);
-
-subplot(1,3,2)
-imagesc(log(abs(im)+1)); axis off
-subplot(1,3,3)
-imagesc(angle(im)); axis off
-colormap(gray) % it looks quite pinappular
+imagesc(im_rss); axis off
+colormap(gray)
+caxis([(min(min(im_rss))/10) max(max(im_rss))])
