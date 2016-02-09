@@ -22,7 +22,7 @@ end
 im = fftshift(ifft2(ifftshift(data)));
 im_rss = sqrt(sum(abs(im).^2, 3));
 
-figure(3)
+figure(2)
 subplot(221)
 imagesc(log(abs(im(:,:,1))+1)); axis off; axis equal
 colormap(gray); title('Single coil magnitude image')
@@ -35,7 +35,19 @@ subplot(223)
 imagesc(angle(im(:,:,1))); axis off; axis equal
 colormap(gray); title('Single coil phase image')
 
-angi = abs(acos(sum(abs(data).*cos(angle(data)),3)./im_rss));
+angi = abs(acos(sum(abs(im).^2.*cos(angle(im)),3)./(im_rss).^2));
 subplot(224)
 imagesc(angi); axis off; axis equal
 colormap(gray); title('Reconstructed phase image')
+
+%% figuring out the phase...
+
+figure (3)
+angi1 = angle(sum(im,3));
+angi2 = abs(acos(sum(abs(im).^2.*cos(angle(im)),3)./(im_rss).^2));
+subplot(211)
+imagesc(angi1); axis off; axis equal
+colormap(gray); title('Reconstructed phase image by summing vectors')
+subplot(212)
+imagesc(angi2); axis off; axis equal
+colormap(gray); title('Reconstructed phase image by weighting angles')

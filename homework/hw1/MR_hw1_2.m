@@ -110,8 +110,8 @@ title(' phase(E) ');
 
 %% checkerboard
 figure
-f1 = sin((1:256)./2);
-f2 = cos((1:256)./2);
+f1 = cos((1:256)*pi./8);
+f2 = cos((1:256)*pi./8);
 [f4, f3] = meshgrid(f1, f2);
 subplot(1,3,1)
 f = f3+f4;
