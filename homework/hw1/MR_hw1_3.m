@@ -1,7 +1,6 @@
 clear all
 close all
 load('whatisthis_8coil')
-
 %% part 1
 figure(1)
 for i=1:size(data,3)
