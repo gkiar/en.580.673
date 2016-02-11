@@ -1,7 +1,7 @@
 %% box
 figure
 a = zeros(256,256);
-a(size(a,1)*3/8+1 : size(a,1)*5/8, size(a,2)*3/8+1 : size(a,2)*5/8) = 1;
+a(size(a,1)*3.5/8+1 : size(a,1)*4.5/8, size(a,2)*3.5/8+1 : size(a,2)*4.5/8) = 1;
 subplot(1,3,1)
 imagesc(a)
 colormap(gray); axis image
