@@ -34,4 +34,4 @@ c) In either case, the shifting wouldn't make a difference in terms of the patte
 ----------------
 
 #### 5.7
-
+![](./hw2_3_57.jpg)
