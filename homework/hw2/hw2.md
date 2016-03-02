@@ -1,7 +1,7 @@
 ## Homework 2
 
 #### 2.1
-- [**`code`**](./R_hw2_1.m)
+- [**`code`**](./MR_hw2_1.m)
 - [**`results`**](./html/)
 - [**`math`**](./hw2_1.pdf)
 
