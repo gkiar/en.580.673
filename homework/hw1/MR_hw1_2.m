@@ -118,7 +118,7 @@ f = f3+f4;
 imagesc(f)
 colormap(gray); axis image
 title('f')
-F= fft2(f);
+F= fft2(ifftshift(f));
 Fprime = fftshift(F);
 Mag = abs(Fprime);
 Ph = angle(Fprime);
