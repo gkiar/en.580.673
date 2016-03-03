@@ -37,3 +37,10 @@ c) In either case, the shifting wouldn't make a difference in terms of the patte
 
 #### 5.7
 ![](./hw2_3_57.jpg)
+<br/>a) Since the amplitude was halfed of our phase encoding sequence, the FOV was doubled. Therefore, the triangle was half as tall.
+<br/>b) Since the frequency encoding is reversed in direction, the image is read as if flipped across the y axis.
+<br/>c) Since the bandpass frequency is too low compared to the sampling frequency, we are over filtering the image and we lose information around the border. This is illustrated in a figure in chapter 5.
+<br/>d) Each 90 degree pulse in +x or -x essentially lines up the vectors being recorded in +y or -y, respectively. So, much like when we flipped the sequence in b), we are just repeating the flipping back and forth for each scan and result in a "bowtie" looking thing that essentially is because we observed the object at half the resolution in both directions.
+<br/>e) Similar to d), except it is now also projected in -x and +x, so we end up with 4 projections of the image, each with 1/4 of the quality/amount of information as the original.
+<br/>f) Since our FOV shrank below the size of our image, we have wrap around alias.
+<br/>g) This one seemed a bit odd, but we know that the FFT of horizontal lines is vertical lines, and it asks us to do a FFT instead of iFFT, so that was my best guess.
