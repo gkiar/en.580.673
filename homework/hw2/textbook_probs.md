@@ -43,4 +43,4 @@ c) In either case, the shifting wouldn't make a difference in terms of the patte
 <br/>d) Each 90 degree pulse in +x or -x essentially lines up the vectors being recorded in +y or -y, respectively. So, much like when we flipped the sequence in b), we are just repeating the flipping back and forth for each scan and result in a "bowtie" looking thing that essentially is because we observed the object at half the resolution in both directions.
 <br/>e) Similar to d), except it is now also projected in -x and +x, so we end up with 4 projections of the image, each with 1/4 of the quality/amount of information as the original.
 <br/>f) Since our FOV shrank below the size of our image, we have wrap around alias.
-<br/>g) This one seemed a bit odd, but we know that the FFT of horizontal lines is vertical lines, and it asks us to do a FFT instead of iFFT, so that was my best guess.
+<br/>g) This one seemed a bit odd, but we know that the FFT of horizontal lines is vertical lines, and it asks us to do a FFT instead of iFFT, so that was my best guess. If we then took the IFFT of this, we would have a triangle like the original but rotated 90 degrees.
