@@ -3,7 +3,7 @@
 
 Profs: Daniel Herzka, Paul Bottomley <br/>
 Email: daniel.herzka@jhu.edu, bottoml@mri.jhu.edu <br/>
-Office: Ross Building Suite 726, Park Building 31 <br/>0
+Office: Ross Building Suite 726, Park Building 31 <br/>
 
 ### Repository ToC
 
