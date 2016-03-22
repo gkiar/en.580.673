@@ -43,7 +43,7 @@ disp(num2str( [a, a1 , a2 ]));
 sprintf('\n\n');
 
 
-%% Plot Experiment 2 (after acquisition)
+   %% Plot Experiment 2 (after acquisition)
 
 figure('Name', 'Net magnetization after DFT Encoding');
 colororder = 'rbmg';

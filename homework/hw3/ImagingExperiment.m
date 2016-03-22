@@ -595,8 +595,8 @@ disp('Experiment 4: Fourier Encoding');fprintf('\n');
 
  % First: create spatial matrix for x & y
 [x__m2,y__m2] = meshgrid(x__m,y__m);               
-dx__m = FOVx__m/ndt; % spatial resolution, x
-dy__m = FOVy__m/nPE; % spatial resolution, y
+dx__m = FOVx__m/Nx; % spatial resolution, x
+dy__m = FOVy__m/Ny; % spatial resolution, y
 
 kx_max = 1/(2*dx__m); % max extent of k-space, x
 ky_max = 1/(2*dy__m);  % max extent of k-space, y
@@ -613,20 +613,22 @@ dky__1_m = 1/FOVy__m; % k-space resolution, x
 % smaller. Shift pixel coordinates by half a pixel width (if even # samples)
 % This correction gets smaller with larger number of pixels
 
+% shift so it's bottom heavy. We want our encoding matrix to look lke we
+% expect it to look... i.e. 
 if ~mod(Nx,2)  % even # pixels - sample DC component
-	kx = linspace(-kx_max, kx_max, 2*kx_max/dkx__1_m);
-	x__m_shifted = x__m - 1/Nx;
+	kx = -kx_max + (0:Nx-1)*dkx__1_m;
+	x__m_shifted = x__m - dx__m/2;
 else
-	kx = linspace(-kx_max, kx_max, 2*kx_max/dkx__1_m);
+	kx = -kx_max + (0:Nx-1)*dkx__1_m + dkx__1_m/2;
 	x__m_shifted = x__m;
 end
 if Nx==1, kx = 0; end
 
 if ~mod(Ny,2)  % even # pixels - sample DC component
-	ky = linspace(-ky_max, ky_max, 2*ky_max/dky__1_m);
-	y__m_shifted = y__m - 1/Ny;
+	ky = -ky_max + (0:Ny-1)*dky__1_m;
+	y__m_shifted = y__m - dy__m/2;
 else
-	ky = linspace(-ky_max, ky_max, 2*ky_max/dky__1_m);
+	ky = -ky_max + (0:Ny-1)*dky__1_m + dky__1_m/2;
 	y__m_shifted = y__m;
 end
 if Ny==1, ky=0; end
@@ -637,12 +639,12 @@ E_ky = zeros(Ny,Ny);
 
 w = @(v) exp(-1i*2*pi/v);
 for kk = 1:Nx
-		E_kx(kk,:) = w(Nx).^((kk-1).*(0:Nx-1));
+	E_kx(kk,:) = w(Nx).^(((kk-1)-floor(Nx/2)).*(kx));
 end
 for kk = 1:Ny
-		E_ky(kk,:) = w(Ny).^((kk-1).*(0:Ny-1));
+	E_ky(kk,:) = w(Ny).^(((kk-1)-floor(Ny/2)).*(ky));
 end
-	
+
 disp('E4: x coordinates: (m)'); disp(x__m)
 disp('E4: y coordinates: (m)'); disp(y__m')
 fprintf('\n');
