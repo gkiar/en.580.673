@@ -19,6 +19,7 @@
 
 **Question 6:**
 > Adding noise makes things worse.
+
 | Sigma | Error |
 |-------|-------|
 |0.1000 | 1.0160|
