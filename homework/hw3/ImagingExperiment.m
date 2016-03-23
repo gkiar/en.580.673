@@ -29,7 +29,7 @@ Gx     = 20;             % mT/m Frequency encoding gradient strength
 
 Gy_max = 30;             % mT/m, max phase encoding gradient strength
 ty     = 500;            % us, duration of phase encoding gradient
-nPE    = 3;              % number of phase encoding steps
+nPE    = 5;              % number of phase encoding steps
 
 FOV    = 20;             % cm, Field-of-view, for both x and y coordinates
 
@@ -38,7 +38,7 @@ gammabar  = 42.58;       % MHz/T
 B0     = 0;              % T, field strength in the rotating frame
 									
 noise  = 0;              % flag for use of noise in measurements
-sig    = 1e-1;           % standard deviation of noise; use %1e-5, -1,-2,-3,-4,-5
+sig    = 1*1e-1;           % standard deviation of noise; use %1e-5, -1,-2,-3,-4,-5
                          %  relative to Amp_max
 
 Amp_max = 20;            % maximum amplitude for A vectors derived with randi
@@ -637,12 +637,11 @@ if Ny==1, ky=0; end
 E_kx = zeros(Nx,Nx);
 E_ky = zeros(Ny,Ny);
 
-w = @(v) exp(-1i*2*pi/v);
 for kk = 1:Nx
-	E_kx(kk,:) = w(Nx).^(((kk-1)-floor(Nx/2)).*(kx));
+    E_kx(kk,:) = exp(-2i*pi*kx(kk)*x__m_shifted);
 end
 for kk = 1:Ny
-	E_ky(kk,:) = w(Ny).^(((kk-1)-floor(Ny/2)).*(ky));
+    E_ky(kk,:) = exp(-2i*pi*ky(kk)*y__m_shifted);
 end
 
 disp('E4: x coordinates: (m)'); disp(x__m)
@@ -683,8 +682,8 @@ DisplayImageAndKspace(FOVx__m, FOVy__m, x__m_shifted, y__m_shifted, dx__m, dy__m
 % First: calculate the amplitudes of the gradients given the assigned durations 
 % of dt__s and ty__s
 
-Gx_FE__T_m  = 1 / (gammabar * FOVx * dt__s); % positive gradient amplitude
-Gy_dPE__T_m = 1 / (gammabar * FOVx * ty_s); % max positive gradient amplitude
+Gx_FE__T_m  = 1 / (gammabar * FOVx__m * dt__s); % positive gradient amplitude
+Gy_dPE__T_m = 1 / (gammabar * FOVy__m * ty__s); % max positive gradient amplitude
 
 disp('E5: Calculated FE delta in gradient amplitude:')
 disp([num2str(Gx_FE__T_m * 1000) , ' mT/m']);
@@ -692,19 +691,21 @@ disp([num2str(Gx_FE__T_m * 1000) , ' mT/m']);
 disp('E5: Calculated PE delta in gradient amplitude:')
 disp([num2str(Gy_dPE__T_m * 1000) , ' mT/m']);
 
+[x__m2_shifted, y__m2_shifted] = meshgrid(x__m_shifted, y__m_shifted);
+dw_FE__rad_s = gamma__rad_Ts*(x__m2_shifted*Gx_FE__T_m); % dphi per dt, <note shift1!>
+dphi_FE_prewind__rad = -dw_FE__rad_s*dt__s;
 if ~mod(Nx,2) % even Nx 
-%	x__m2_shifted = FILL;
-%   dw_FE__rad_s = FILL;           % dphi per dt, <note shift1!>
+% 	x__m2_shifted = FILL;
 %	dphi_FE_prewind__rad = FILL;   % phase accrued by the echo time (kx=0)  
 else
 %	dw_FE__rad_s = FILL;           % dphi per dt
 %	dphi_FE_prewind__rad = FILL;   % phase accrued by the echo tiem (kx=0)
 end
 
+dw_PE_max__rad_s = gamma__rad_Ts*(y__m2_shifted*Gy_dPE__T_m); % dphi per ty, with max Gy on <note shift!>
 
 if ~mod(Ny,2) % even Ny
-%	y__m2_ = FILL;
-%	dw_PE_max__rad_s = FILL; % dphi per ty, with max Gy on <note shift!>
+%	y__m2_shifted = FILL;
 else
 %	dw_PE_max__rad_s = FILL; % dphi per ty, with max Gy on
 end
