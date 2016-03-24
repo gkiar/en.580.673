@@ -5,7 +5,7 @@
  
 %% Setup encoding/decoding matrices
 
-N = 4;
+N = 1024;
 
 
 %a = ones(N,1);  % the signal (representing 5 equally spaced pixels in our FOV
@@ -23,11 +23,14 @@ n2 = 0:N-1;
 n2 = repmat(n2,N,1);
 
 Wforward =            exp(   W.*n1.*n2);   % defined as in MATLAB's fft
-	
+
+  tic 
 Winverse_calc = (1/N )*exp(-1*W.*n1.*n2);  % defined as in MATLAB's fft
+time_calc = toc;
 
+tic
 Winverse_actual = inv(Wforward);
-
+time_pinv = toc;
 Winverse = Winverse_calc;
 
 A1=fft(a);
@@ -36,42 +39,43 @@ A2=Wforward*a;
 a1 = ifft(A1);
 a2 = Winverse*A2;
 
-disp('Encoded vectors fft | Wforward');
-disp(num2str( [ A1 , A2 ]));
-fprintf('\n\n');
+% disp('Encoded vectors fft | Wforward');
+% disp(num2str( [ A1 , A2 ]));
+% fprintf('\n\n');
+% 
+% disp('Recovered vectors: original | ifft | Winverse');
+% disp([ num2str( [a, a1 , a2 ] ) ]); 
+% fprintf('\n\n');
+% 
+% disp('Encoding Matrix')
+% disp(Wforward)
+% fprintf('\n\n');
+% 
+% disp('Row-reduced Echelon form of the Encoding Matrix')
+% disp(rref(Wforward))
+% fprintf('\n\n');
+% 
+% disp('Rank of the Encoding Matrix')
+% disp(rank(Wforward))
+% fprintf('\n\n');
+% 
+% disp('Condition #')
+% disp(cond(Wforward))
+% fprintf('\n\n');
+% 
+% disp('Derived Inverse Matrix:');
+% disp(Winverse_actual)
+% fprintf('\n\n');
+% 
+% disp('Calculated Inverse Matrix:');
+% disp(Winverse_calc)
+% fprintf('\n\n');
 
-disp('Recovered vectors: original | ifft | Winverse');
-disp([ num2str( [a, a1 , a2 ] ) ]); 
-fprintf('\n\n');
 
-disp('Encoding Matrix')
-disp(Wforward)
-fprintf('\n\n');
-
-disp('Row-reduced Echelon form of the Encoding Matrix')
-disp(rref(Wforward))
-fprintf('\n\n');
-
-disp('Rank of the Encoding Matrix')
-disp(rank(Wforward))
-fprintf('\n\n');
-
-disp('Condition #')
-disp(cond(Wforward))
-fprintf('\n\n');
-
-disp('Derived Inverse Matrix:');
-disp(Winverse_actual)
-fprintf('\n\n');
-
-disp('Calculated Inverse Matrix:');
-disp(Winverse_calc)
-fprintf('\n\n');
-
-
-disp(' ... paused ...'); 
-pause
-
+% disp(' ... paused ...'); 
+% pause
+time_calc
+time_pinv
 %% Plot (after acquisition)
 
 figure('Name', 'Net magnetization after DFT Encoding');
