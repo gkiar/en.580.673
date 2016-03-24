@@ -50,4 +50,10 @@
 ![](./figs/encoding.png)
 
 **Question 12:**
-> tic toc around line 499 and then tic toc around fourier matrix and compare
+> As can be seen in the table below, it consistently takes more time for calculating the psuedoinverse to be computed than the direct computation of the inverse matrix.
+
+|      | Time to calculate | Time to pinv |
+|------|-------------------|--------------|
+|256   | 0.0023 | 0.0084 |
+|512   | 0.0107 | 0.0466 |
+|1024  | 0.0507 | 0.2924 |
