@@ -1,18 +1,22 @@
 **Question 1:**
-> No, we cannot calculate the thingies. Each pixel has the same phase so the magnetization becomes: <br/> M(t) =  exp(-i\*phi(t))\*sum(p=1,Npixels,Ap)
+> As there is no gradient applied, all pixels have the same phase as one another. Thus, we cannot calculate individual pixel intensities and only get a measurement for the sum of all pixels. The equation becomes:
+
+Insert picture
 
 **Question 2:**
-> The matrix is still rank deficient... We add rows but they are not linearly independent from the previous so the rank does not increase. Relaxation wouldn't change anything unless each pixel had different tissue properties
+> The encoding matrix takes the shape Nfe x Nx. When we add more frequency encodes, we are adding more rows to the table but they are linearly dependent upon the previous, thus the rank does not increase. If there was relaxation considered in this model, it would only change this if each pixel had different tissue properties.
 
 **Question 3:**
-> a) Beyond N_dt=N_px & Npe=N_py, nothing, rank is N_p
+> For answering these questions we'll first define what the rank of these matrices ends up being: rank=min(Npe, Ny)*min(Nfe, Nx)
 
-> b) Until N_dt=N_px & Npe=N_py, nothing, then aliasing because we start losing rank
+> a) As we increase Ndt and Npe, we will increase rank until we have reached the number of pixels in the image, at which point the rank is Np. Then, further increase will not affect the rank but will reduce the condition number.
 
-> c) High cond but full rank at 10 and up, cond number drops significantly at 19. below 10, image is not recovered
+> b) As we decrease Ndt and Npe, we will maintain full rank (Np) until we reach the number of pixels in the X or Y directions for frequency or phase encoding, respectively. Beyond that, we begin to lose rank and then aliasing will occur as multiple pixels will have the same phase accrual.
+
+> c) At Ndt = Npe = 10 (i.e. Np) the rank will be full and the image will be reconstructed. However, the condition number will be very high with only this many samples, meaning that the computation of the inverse is very unstable. Once the number of phase and frequency encodes reaches 19 and upward, the condition number drops considerably, yielding a stable reconstruction.
 
 **Question 4:**
-> Rank would equal N_pe up until the value of Ny, then the rank would remain Ny. We would effectively recover an image with Nx = 1 (all x pixels blurred together for each row). rank= min(Npe, Ny)*min(Nfe, Nx)
+> As can be seen in the equation defined at the start of Question 3, the rank would equal N_pe up until the value of Ny, then the rank would remain Ny. The reconstructed image would have 1 X-pixel
 
 **Question 5:**
 > You need twice as many samples to have a low condition number. Rank is equivalent to that in the solely real case, but condition number is super large making the matrix difficult to invert.
@@ -39,3 +43,9 @@
 
 **Question 10:**
 > If we worked with continuous values instead of pixels we would instead need to assign continuous functions to calculate the phase accrued at each point (i.e. an infinite number for Ndt and Npe). This would be WAY too computationally complex to actually solve in practice.
+
+**Question 11:**
+> Make encoding matrix in latex and attach it
+
+**Question 12:**
+> tic toc around line 499 and then tic toc around fourier matrix and compare
