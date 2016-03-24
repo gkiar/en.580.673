@@ -682,8 +682,8 @@ DisplayImageAndKspace(FOVx__m, FOVy__m, x__m_shifted, y__m_shifted, dx__m, dy__m
 % First: calculate the amplitudes of the gradients given the assigned durations 
 % of dt__s and ty__s
 
-Gx_FE__T_m  = 1 / (gammabar * FOVx__m * dt__s); % positive gradient amplitude
-Gy_dPE__T_m = 1 / (gammabar * FOVy__m * ty__s); % max positive gradient amplitude
+Gx_FE__T_m  = 1 / (gammabar_Hz_T * FOVx__m * dt__s); % positive gradient amplitude
+Gy_dPE__T_m = 1 / (gammabar_Hz_T * FOVy__m * ty__s); % max positive gradient amplitude
 
 disp('E5: Calculated FE delta in gradient amplitude:')
 disp([num2str(Gx_FE__T_m * 1000) , ' mT/m']);
@@ -692,23 +692,10 @@ disp('E5: Calculated PE delta in gradient amplitude:')
 disp([num2str(Gy_dPE__T_m * 1000) , ' mT/m']);
 
 [x__m2_shifted, y__m2_shifted] = meshgrid(x__m_shifted, y__m_shifted);
-dw_FE__rad_s = gamma__rad_Ts*(x__m2_shifted*Gx_FE__T_m); % dphi per dt, <note shift1!>
-dphi_FE_prewind__rad = -dw_FE__rad_s*dt__s;
-if ~mod(Nx,2) % even Nx 
-% 	x__m2_shifted = FILL;
-%	dphi_FE_prewind__rad = FILL;   % phase accrued by the echo time (kx=0)  
-else
-%	dw_FE__rad_s = FILL;           % dphi per dt
-%	dphi_FE_prewind__rad = FILL;   % phase accrued by the echo tiem (kx=0)
-end
+dw_FE__rad_s = gamma__rad_Ts*(x__m2_shifted*Gx_FE__T_m);
+dphi_FE_prewind__rad = dw_FE__rad_s*ceil((Nx-1)/2)*dt__s;
 
 dw_PE_max__rad_s = gamma__rad_Ts*(y__m2_shifted*Gy_dPE__T_m); % dphi per ty, with max Gy on <note shift!>
-
-if ~mod(Ny,2) % even Ny
-%	y__m2_shifted = FILL;
-else
-%	dw_PE_max__rad_s = FILL; % dphi per ty, with max Gy on
-end
 
 Mtotal = zeros(Ny, Nx);                       % net complex magnetization to outside observer
 M = zeros(size(A,1),size(A,2),Ny,Nx);         % intermediate individual magnetization vectors
@@ -731,28 +718,27 @@ disp(PEmult);
 Ex = zeros(Nx,Nx);                      % Encoding matrix, x dimension
 Ey = zeros(Ny,Ny);                      % Encoding matrix, y dimension
 
-%Ex_prewind = FILL;   % vector that represents readout prewinder phase
+Ex_prewind = exp(-1i*dphi_FE_prewind__rad(1,:));   % vector that represents readout prewinder phase
 
 for m = 0:(Ny-1) % for each PE
 	% Phase encode. Since the PE occurs before FE, the
 	% action of the gradient can be described as a single precession
 	% about z by an angle determined both Gy_max * PEmult
 	
-	%phi_PE__rad = FILL;
-	%A_PE_preFE = FILL;
-
-	%Ey(:,m+1) = FILL;
+    phi_PE__rad = dw_PE_max__rad_s * ty__s * PEmult(m+1);
+	A_PE_preFE = exp(-1i*phi_PE__rad) .* A;
+    
+	Ey(:,m+1) = exp(-1i*phi_PE__rad(:,1)); %apply exp(-1phi) to all ys
 	
 	% Prewind the frequency encode
-	%A_PE_preFE = FILL; % fcn of prev A_PE_preFE
+	A_PE_preFE = exp(-1i*dphi_FE_prewind__rad) .* A_PE_preFE; % fcn of prev A_PE_preFE
 
 	% Now repeat the frequency encoding experiment for each PE. Note the
 	% use of A_PE instead of A (a pre-phase warped version of A)
-	
-	for n = 0:(Nx-1)
-		%phi_FE__rad = FILL;
-		
-		%Ex(n+1,:)  = FILL;  % all rows the same
+    for n = 0:(Nx-1)
+		phi_FE__rad = dw_FE__rad_s * dt__s * n;
+        
+		Ex(n+1,:)  = exp(-1i*phi_FE__rad(1,:));  % all rows the same
 		
 		Mtotal(m+1,n+1) = sum( sum( exp(-1i*phi_FE__rad) .* A_PE_preFE ,1),2) + noise2(m+1,n+1);
 		M(:,:,m+1,n+1) =            exp(-1i*phi_FE__rad) .* A_PE_preFE;
@@ -831,30 +817,23 @@ end
 
 % Calculate IDFT matrices for Nx and Ny; 
 
-%Wx = FILL;
-%Wx = FILL; 
+Wx = -1i*2*pi/Nx;
+Wx = repmat(Wx,Nx,Nx);
+n1 = (0:Nx-1)';
+n1 = repmat(n1,1,Nx);
+n2 = 0:Nx-1;
+n2 = repmat(n2,Nx,1);
+Wx_decode = (1/Nx)*exp(-1*Wx.*n1.*n2);
 
-%n1 = FILL; 
-%n1 = FILL; 
+Wy = -1i*2*pi/Ny;
+Wy = repmat(Wy,Ny,Ny);
+n1 = (0:Ny-1)';
+n1 = repmat(n1,1,Ny);
+n2 = 0:Ny-1;
+n2 = repmat(n2,Ny,1);
+Wy_decode = (1/Ny)*exp(-1*Wy.*n1.*n2);
 
-%n2 = FILL; 
-%n2 = FILL; 
-
-%Wx_decode  = FILL;   % scaling defined as in MATLAB's fft
-
-%Wy = FILL; 
-%Wy = FILL; 
-
-%n1 = FILL; 
-%n1 = FILL; 
-
-%n2 = FILL; 
-%n2 = FILL; 
-
-%Wy_decode = FILL;   % sacling as defined as in MATLAB's fft
-
-%Arec_DFT   = FILL; 
-
+Arec_DFT   = Wy_decode*Wx_decode*Mtotal; 
 Arec_ifft2 = fftshift(ifft2(ifftshift(Mtotal)));
 
 RowReduced_EncodingMatrix = rref(Wx_decode);
@@ -899,6 +878,4 @@ elseif Nx<32
 elseif Ny<32
 	PlotIdealEncodingMatrices(1,Ny);
 end
-
-
 

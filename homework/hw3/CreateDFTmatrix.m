@@ -9,8 +9,8 @@
 N = 3;
 
 
-%a = ones(N,1);  % the signal (representing 5 equally spaced pixels in our FOV
-a = (1:N).';
+a = ones(N,N);  % the signal (representing 5 equally spaced pixels in our FOV
+% a = (1:N).';
 %a = circshift(a,[1 1])
 
 W = -1i*2*pi/N;
