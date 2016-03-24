@@ -10,3 +10,4 @@ Office: Ross Building Suite 726, Park Building 31 <br/>
 - [**``./homework/hw1/``**](./homework/hw1/)
 - [**``./homework/hw2/``**](./homework/hw2/)
 - [**``./midterm/midterm-mrm-spring.pdf``**](./midterm/midterm-mrm-spring.pdf)
+- [**``./homework/hw3/``**](./homework/hw3/)
