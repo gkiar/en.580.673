@@ -133,7 +133,7 @@ Achoices.Custom   = MakeAMatrix(5,5,Amp_max);
 
 %% Choose Image Matrix
 
-A = Achoices.A2_4i;		% choose one of the examples provided				
+A = Achoices.A10_11i;		% choose one of the examples provided				
 
 % A = MakeAMatrix(50, 40, 15);
 % spatial coordinate matrix
