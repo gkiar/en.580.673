@@ -133,8 +133,9 @@ Achoices.Custom   = MakeAMatrix(5,5,Amp_max);
 
 %% Choose Image Matrix
 
-A = Achoices.A4_4;		% choose one of the examples provided				
+A = Achoices.A2_4i;		% choose one of the examples provided				
 
+% A = MakeAMatrix(50, 40, 15);
 % spatial coordinate matrix
 Nx = size(A,2);
 Ny = size(A,1);
@@ -206,138 +207,138 @@ FOVy__m = FOV / 100;
 
 
 %% Experiment 1: No Encoding - Start 
-% This experiment is skipped as it is demonstrated in the non-FE non PE
-% case (Experiment 2). 
+% % This experiment is skipped as it is demonstrated in the non-FE non PE
+% % case (Experiment 2). 
+% 
+% 
+% %% Experiment 2: Frequency Encoding - Start 
+% disp('Experiment 2: Frequency Encoding:');fprintf('\n');
+% 
+% 
+% %% Experiment 2: Acquisition
+% % In the rotating frame, the precession frequency (delta_omega) is given by
+% % the gyromagnetic ratio and the delta in the B-field due to the gradient
+% % in the x-direction
+%  
+% dw_rad__s = gamma__rad_Ts * (B0__T + x__m .* Gx__T_m);     %  rad/sec (or 2pi*Hz)
+% 
+% % Calculate the amount of precession (in rad) for each x-coordinate
+% 
+% dphi__rad = dw_rad__s * dt__s;
+% 
+% disp('E2: Rotation per gradient time step (deg) at each x location:');
+% disp(num2str(x));
+% disp(num2str(dphi__rad * 180/ (2*pi) ) );
+% fprintf('\n');
+% 
+% % delta-phi represents how much phase is accrued per dt when gradient Gx is on.
+% % We  use this to figure out how much each ensemble of spins precesses due
+% % to gradients.
+% 
+% % For each time point (t1:t_ndt), we sense a signal that is
+% % composed of a complex value correpondent to the net magnetization at that
+% % time. At  t1, no time has elapsed, and as such all magnetization
+% % is aligned along the y axis.  After that, we have precession dphi per dt
+% 
+% x__m2 = repmat(x__m, size(A,1),1);        % create spatial matrix for x coordinates
+% Mtotal = zeros(1,ndt);                     % initialize net complex magnetization observer
+% M = zeros(size(A,1),size(A,2),ndt);      % initialize intermediate individual magnetization vectors
+% 
+% dw_FE_rad__s = gamma__rad_Ts * (B0__T+ Gx__T_m*x__m2);  % precession frequency due to Gx
+% 
+% for n = 1:ndt
+% 	phi_FE__rad = dw_FE_rad__s * dt__s * (n-1);	
+% 	Mtotal(n) = sum( sum( A .* exp(1i*phi_FE__rad),1),2) + noise1(1,n);
+% 	M(:,:,n) =            A .* exp(1i*phi_FE__rad);
+% end
+% 
+% 
+% %% Experiment 1: Plot Encoded Vectors (after acquisition)
+% 
+% figure('Name', 'Net magnetization no Spatial Localization or Encoding');
+% colororder = 'rkbmg';
+% colororder = repmat(colororder, [1, ceil(ndt/length(colororder))+1]);
+% leg_string ={};
+% h_m=0;
+% 
+% 
+% n = 1;
+% 
+% Mtmp = M(:,:,n).';
+% Mtmp = Mtmp(:);
+% 
+% for j=1:length(Mtmp)
+% 	plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], ...
+% 		[colororder(n),':o'],...
+% 		'linewidth', 1);
+% 	hold on;
+% end
+% 
+% h_m(n) = plot([0, real( Mtotal(n)) ], [ 0 imag(Mtotal(n)) ], ...
+% 	[colororder(n),'-o'], ...
+% 	'linewidth', 4, 'markerfacecolor', colororder(n));
+% leg_string = cat(1,leg_string, ['t_{', num2str(n), '}']);
+% 	
+% 	
+% axis equal;
+% set(gca, 'fontsize', fs);
+% xlabel('x', 'fontsize', fs);
+% ylabel('y', 'fontsize', fs);
+% title(' M_{net} - the Measured Magnetization');
+% ll = sum(A(:));
+% xlim([-ll,ll]); ylim([-ll,ll]);
+% 
+% if nPE*ndt<20
+% 	h_leg=legend(h_m, leg_string, 'location','eastoutside');
+% 	set(h_leg, 'fontsize', fs);
+% end
+% 
+% 
+% %% Experiment 2: Plot Encoded Vectors (after acquisition)
+% 
+% figure('Name', 'Net magnetization after Frequency Encoding');
+% colororder = 'rkbmg';
+% colororder = repmat(colororder, [1, ceil(ndt/length(colororder))+1]);
+% leg_string ={};
+% h_m=zeros(1,ndt);
+% for n=1:ndt
+% 	
+% 	Mtmp = M(:,:,n).';
+% 	Mtmp = Mtmp(:);
+% 	
+% 	for j=1:length(Mtmp)	
+% 		plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], ...
+% 			[colororder(n),':o'],...
+% 			'linewidth', 1);
+% 		hold on;
+% 	end
+% 	h_m(n) = plot([0, real( Mtotal(n)) ], [ 0 imag(Mtotal(n)) ], ...
+% 		[colororder(n),'-o'], ...
+% 		'linewidth', 4, 'markerfacecolor', colororder(n));	
+% 	leg_string = cat(1,leg_string, ['t_{', num2str(n), '}']);
+% 	
+% 	
+% end;
+% 
+% axis equal;
+% set(gca, 'fontsize', fs);
+% xlabel('x', 'fontsize', fs);
+% ylabel('y', 'fontsize', fs);
+% title(' M_{net} - the Measured Magnetization');
+% ll = sum(abs(A(:)));
+% xlim([-ll,ll]); ylim([-ll,ll]);
+% 
+% if nPE*ndt<20
+% 	h_leg=legend(h_m, leg_string, 'location','eastoutside');
+% 	set(h_leg, 'fontsize', fs);
+% end
+% 
+% % Note: you should see that delta functions that are colocalized in x cannot
+% % be distinguished. In other words, we can try and set up a system of
+% % equations but it should not work, regardless of how we approach the problem.
 
 
-%% Experiment 2: Frequency Encoding - Start 
-disp('Experiment 2: Frequency Encoding:');fprintf('\n');
-
-
-%% Experiment 2: Acquisition
-% In the rotating frame, the precession frequency (delta_omega) is given by
-% the gyromagnetic ratio and the delta in the B-field due to the gradient
-% in the x-direction
- 
-dw_rad__s = gamma__rad_Ts * (B0__T + x__m .* Gx__T_m);     %  rad/sec (or 2pi*Hz)
-
-% Calculate the amount of precession (in rad) for each x-coordinate
-
-dphi__rad = dw_rad__s * dt__s;
-
-disp('E2: Rotation per gradient time step (deg) at each x location:');
-disp(num2str(x));
-disp(num2str(dphi__rad * 180/ (2*pi) ) );
-fprintf('\n');
-
-% delta-phi represents how much phase is accrued per dt when gradient Gx is on.
-% We  use this to figure out how much each ensemble of spins precesses due
-% to gradients.
-
-% For each time point (t1:t_ndt), we sense a signal that is
-% composed of a complex value correpondent to the net magnetization at that
-% time. At  t1, no time has elapsed, and as such all magnetization
-% is aligned along the y axis.  After that, we have precession dphi per dt
-
-x__m2 = repmat(x__m, size(A,1),1);        % create spatial matrix for x coordinates
-Mtotal = zeros(1,ndt);                     % initialize net complex magnetization observer
-M = zeros(size(A,1),size(A,2),ndt);      % initialize intermediate individual magnetization vectors
-
-dw_FE_rad__s = gamma__rad_Ts * (B0__T+ Gx__T_m*x__m2);  % precession frequency due to Gx
-
-for n = 1:ndt
-	phi_FE__rad = dw_FE_rad__s * dt__s * (n-1);	
-	Mtotal(n) = sum( sum( A .* exp(1i*phi_FE__rad),1),2) + noise1(1,n);
-	M(:,:,n) =            A .* exp(1i*phi_FE__rad);
-end
-
-
-%% Experiment 1: Plot Encoded Vectors (after acquisition)
-
-figure('Name', 'Net magnetization no Spatial Localization or Encoding');
-colororder = 'rkbmg';
-colororder = repmat(colororder, [1, ceil(ndt/length(colororder))+1]);
-leg_string ={};
-h_m=0;
-
-
-n = 1;
-
-Mtmp = M(:,:,n).';
-Mtmp = Mtmp(:);
-
-for j=1:length(Mtmp)
-	plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], ...
-		[colororder(n),':o'],...
-		'linewidth', 1);
-	hold on;
-end
-
-h_m(n) = plot([0, real( Mtotal(n)) ], [ 0 imag(Mtotal(n)) ], ...
-	[colororder(n),'-o'], ...
-	'linewidth', 4, 'markerfacecolor', colororder(n));
-leg_string = cat(1,leg_string, ['t_{', num2str(n), '}']);
-	
-	
-axis equal;
-set(gca, 'fontsize', fs);
-xlabel('x', 'fontsize', fs);
-ylabel('y', 'fontsize', fs);
-title(' M_{net} - the Measured Magnetization');
-ll = sum(A(:));
-xlim([-ll,ll]); ylim([-ll,ll]);
-
-if nPE*ndt<20
-	h_leg=legend(h_m, leg_string, 'location','eastoutside');
-	set(h_leg, 'fontsize', fs);
-end
-
-
-%% Experiment 2: Plot Encoded Vectors (after acquisition)
-
-figure('Name', 'Net magnetization after Frequency Encoding');
-colororder = 'rkbmg';
-colororder = repmat(colororder, [1, ceil(ndt/length(colororder))+1]);
-leg_string ={};
-h_m=zeros(1,ndt);
-for n=1:ndt
-	
-	Mtmp = M(:,:,n).';
-	Mtmp = Mtmp(:);
-	
-	for j=1:length(Mtmp)	
-		plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], ...
-			[colororder(n),':o'],...
-			'linewidth', 1);
-		hold on;
-	end
-	h_m(n) = plot([0, real( Mtotal(n)) ], [ 0 imag(Mtotal(n)) ], ...
-		[colororder(n),'-o'], ...
-		'linewidth', 4, 'markerfacecolor', colororder(n));	
-	leg_string = cat(1,leg_string, ['t_{', num2str(n), '}']);
-	
-	
-end;
-
-axis equal;
-set(gca, 'fontsize', fs);
-xlabel('x', 'fontsize', fs);
-ylabel('y', 'fontsize', fs);
-title(' M_{net} - the Measured Magnetization');
-ll = sum(abs(A(:)));
-xlim([-ll,ll]); ylim([-ll,ll]);
-
-if nPE*ndt<20
-	h_leg=legend(h_m, leg_string, 'location','eastoutside');
-	set(h_leg, 'fontsize', fs);
-end
-
-% Note: you should see that delta functions that are colocalized in x cannot
-% be distinguished. In other words, we can try and set up a system of
-% equations but it should not work, regardless of how we approach the problem.
-
-
-%% Experiment 2: Recover the Image
+% %% Experiment 2: Recover the Image
 
 % We want to (attempt to) reverse calculate A from the data above so we
 % have to set up a system of of the form:
@@ -354,14 +355,14 @@ end
 %
 % Avec = pinv(EncodingMatrix) * Mnet
 
-EncodingMatrix =  exp( -1i * ((0:ndt-1).'*dt__s) * dw_FE_rad__s(:).' );
-I_EncodingMatrix = pinv(EncodingMatrix);
-
-Avec = I_EncodingMatrix * Mtotal.';
-Avec = reshape(Avec, size(A));
-
-disp('E2: A'' as obtained by pinv:');
-disp((Avec));
+% EncodingMatrix =  exp( -1i * ((0:ndt-1).'*dt__s) * dw_FE_rad__s(:).' );
+% I_EncodingMatrix = pinv(EncodingMatrix);
+% 
+% Avec = I_EncodingMatrix * Mtotal.';
+% Avec = reshape(Avec, size(A));
+% 
+% disp('E2: A'' as obtained by pinv:');
+% disp((Avec));
 
 % What does this result mean? It means that we have an ill conditioned
 % inversion problem! As can be seen by Figure 1, the vectors that are
@@ -372,221 +373,221 @@ disp((Avec));
 % One way to explore this idea is to look at the row-reduced (low-echelon)
 % form of the encoding matrix:
 
-RowReduced_EncodingMatrix = rref(EncodingMatrix);
-Condition_EncodingMatrix  = cond(EncodingMatrix);
-Rank_EncodingMatrix = rank (EncodingMatrix);
-disp('E2: Row-reduced version of the Encoding Matrix');
-disp(RowReduced_EncodingMatrix);
-disp('E2: Condition number');
-disp(Condition_EncodingMatrix);
-disp('E2: Rank');
-disp(Rank_EncodingMatrix);
+% RowReduced_EncodingMatrix = rref(EncodingMatrix);
+% Condition_EncodingMatrix  = cond(EncodingMatrix);
+% Rank_EncodingMatrix = rank (EncodingMatrix);
+% disp('E2: Row-reduced version of the Encoding Matrix');
+% disp(RowReduced_EncodingMatrix);
+% disp('E2: Condition number');
+% disp(Condition_EncodingMatrix);
+% disp('E2: Rank');
+% disp(Rank_EncodingMatrix);
 
 % We should see that the shape of the matrix makes it impossible to invert!
 
 
-%% Experiment 3: Frequency and Phase Encoding -Start 
-disp('Experiment 3: Phase Encoding');fprintf('\n');
-
-% We begin by applying a gradient in the y-direction, of one dt in duration.
-% We vary the amplitude in fractions of a maxGy gradient amplitude(nPE=number of
-% phase encodes), resulting in different phase accrual during that time period.
-
-
-%% Experiment 3: Define and convert some intermediate values 
-
-x__m2 = repmat(x__m, size(A,1),1);            % create spatial matrix for x gradient
-
-Gy_max__mT_m = Gy_max;                        % max phase encoding gradient
-y__m2  = repmat(y__m, 1, size(A,2));          % create spatial matrix for y gradient
-PE     = linspace(-1,1,nPE).';                % column vector of fractional values for each PE step
-
-Mtotal = zeros(nPE, ndt);                     % net complex magnetization observer
-M = zeros(size(A,1),size(A,2),nPE,ndt);       % intermediate individual magnetization vectors
-
-dw_FE_rad__s = gamma__rad_Ts * (B0__T+ x__m2 * Gx__T_m);
-dw_PE_rad__s = gamma__rad_Ts * (B0__T+ y__m2 * Gy_max__T_m);
-
-% Calculate the precesion angle for the maximum PE gradient for each
-% y-coordinate
-
-for m = 0:(nPE-1)
-	% Calculate the phase encoded A (effectively A that has precessed 
-	% about z) since the gradient occurs before frequency encoding, the
-	% action of the gradient can be described as a single precession
-	phi_rad__PE = dw_PE_rad__s * ty__s * PE(m+1);
-	A_PE_preFE = exp(1i*phi_rad__PE).*A;
-	
-	% Now repeat the frequency encoding experiment for each PE. Note the
-	% use of A_PE instead of A (a pre-phase warped version of A)
-	
-	for n = 0:(ndt-1)
-		phi_FE__rad = dw_FE_rad__s * dt__s * n;
-		Mtotal(m+1,n+1) = sum( sum( A_PE_preFE .* exp(1i*phi_FE__rad),1),2) + noise1(m+1,n+1);
-		M(:,:,m+1,n+1) =            A_PE_preFE .* exp(1i*phi_FE__rad);
-	end
-	
-
-end
-
-
-%% Experiment 3: Plot Encoded Vectors (after acquisition)
-figure('Name', 'Net magnetization after Frequency and Phase Encoding');
-colororder = 'rkbmg';
-colororder = repmat(colororder, [1, ceil(ndt*nPE/length(colororder))+1]);
-symbolorder = 'ox^vs';
-symbolorder = repmat(symbolorder, [1, ceil(ndt*nPE/length(symbolorder))+1]);
-leg_string = cell(nPE,ndt);
-h_mn = zeros(nPE, ndt);
-
-
-for m = 1:nPE
-	for n=1:ndt
-	
-		Mtmp = M(:,:,m,n).';
-		Mtmp = Mtmp(:);
-		
-		for j=1:length(Mtmp)
-			plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], [colororder(n),':', symbolorder(m)]);
-			hold on;
-		end
-		h_mn(m,n) = plot([0, real( Mtotal(m,n)) ], [ 0 imag(Mtotal(m,n)) ], [colororder(n),'-', symbolorder(m)], ...
-			'linewidth', 2, 'markerfacecolor', colororder(n));
-		leg_string{m,n} =  ['t_{', num2str(n), '}', '-nPE=', num2str(m)];
-	end
-
-end;
-
-axis equal;
-set(gca, 'fontsize', fs);
-xlabel('x', 'fontsize', fs);
-ylabel('y', 'fontsize', fs);
-ll = sum(abs(A(:)));
-xlim([-ll,ll]); ylim([-ll,ll]);
-if nPE*ndt<20	
-	legend(h_mn(:),leg_string{:}, 'location','eastoutside');
-	set(h_leg, 'fontsize', fs);
-end
-
-
-%% Experiment 3: Recover the Image
-
-% Setup the same system of equations:
-%
-%  Mnet             = EncodingMatrix          * Avec
-% ( (ndt*nPE) x 1)    ((ndt*nPE) x Npixels)   * (Npixels x 1)
-%
-% where A_vec correspondes to the vectorized version of A(:). Each row of
-% the encoding matrix corresponds to the phase values we imparted with the
-% gradient above. Note that we have to expand the FE and PE ecnoding
-% matrices to create a single encoding matrix, with one row per
-% "combintation" of FE and PE. Hence, the EM should have size:
-%   ndt*nPE x length(Avec)
-
-
-%
-% Avec = pinv(EncodingMatrix) * Mnet
-
-EncodingMatrixFE =  exp( 1i * ((0:ndt-1).' * dt__s) * dw_FE_rad__s(:).' );
-EncodingMatrixPE =  exp( 1i * (PE * ty__s) * dw_PE_rad__s(:).' );
-
-EncodingMatrixPE = repmat( EncodingMatrixPE, ndt,1);
-
-B = shiftdim(EncodingMatrixFE,-1);
-C = repmat(B, [ nPE 1 1]);
-EncodingMatrixFE = reshape(C,nPE*ndt,length(A(:)));
-
-I_EncodingMatrix = pinv(EncodingMatrixFE .* EncodingMatrixPE);
-
-RowReduced_EncodingMatrix = rref(EncodingMatrixFE .* EncodingMatrixPE);
-Condition_EncodingMatrix  = cond(EncodingMatrixFE .* EncodingMatrixPE);
-Rank_EncodingMatrix = rank (EncodingMatrixFE .* EncodingMatrixPE);
-disp('E3: Row-reduced version of the Encoding Matrix');
-disp(RowReduced_EncodingMatrix);
-disp('E3: Condition number');
-disp(Condition_EncodingMatrix);
-disp('E3: Rank');
-disp(Rank_EncodingMatrix);
-
-Avec = I_EncodingMatrix * Mtotal(:);
-Avec = reshape(Avec, size(A));
-
-disp('E3: A as obtained by pinv (real):');
-disp(real(Avec));
-disp('E3: A as obtained by pinv (imag):');
-disp(imag(Avec));
-
-
-disp('E3: Original (real):');
-disp(real(A));
-disp('E3: Original (imag):');
-disp(imag(A));
-
-
-disp('E3: Error norm (A-Avec)');
-disp(norm(A-Avec));
-
-
-%% Experiment 3: Display image - recovered
-
-figure('Name', 'Recovered Image');
-h_im = imagesc(x,y,abs(Avec));
-h_ax = ancestor(h_im, 'axes');
-colormap(gray);
-axis image
-
-hold on;
-ii=1;
-for xx = 1:length(x)
-	for yy = 1:length(y)
-
-		plot(x(xx),y(yy), 'ro', ...
-			'markerfacecolor', 'r', 'markersize', 10);
-		text(x(xx),y(yy), ...
-			['A_{', num2str(ii), '}=', num2str(real(Avec(yy,xx)), '%2.2f'),' + ', num2str(imag(Avec(yy,xx)), '%2.2f'),'i'    ], ...
-			'Fontsize', 40/sqrt(length(A)), 'horizontalAlignment', 'Center', ...
-			'VerticalAlignment', 'Bottom', 'color', 'r');
-		ii=ii+1;
-	end
-end
-
-set(h_ax, 'fontsize', fs, 'clim', clim);
-xlabel('x', 'fontsize', fs);
-ylabel('y', 'fontsize', fs);
-
-
-%% Experiment 3: Display image - difference
-
-diff_vec = A-Avec;
-diff_vec = diff_vec(:);
-err = abs(max(diff_vec));
-err_ord = ceil(log10(err));
-
-f=figure('Name', ['Difference Image (max error  x 10^', num2str(err_ord),')']);
-h_im = imagesc(x,y,abs(A-Avec));
-h_ax = ancestor(h_im, 'axes');
-colormap(gray);
-axis image
-
-hold on;
-ii=1;
-for xx = 1:length(x)
-	for yy = 1:length(y)
-
-		plot(x(xx),y(yy), 'ro', ...
-			'markerfacecolor', 'r', 'markersize', 10);
-		text(x(xx),y(yy), ...
-			['A_{', num2str(ii), '}=', num2str( abs((A(yy,xx) - Avec(yy,xx)) / 10^err_ord), 2)], ...
-			'Fontsize', 40/sqrt(length(A)), 'horizontalAlignment', 'Center', ...
-			'VerticalAlignment', 'Bottom', 'color', 'r');
-		ii=ii+1;
-	end
-end
-
-set(h_ax, 'fontsize', fs, 'clim', clim);
-xlabel('x', 'fontsize', fs);
-ylabel('y', 'fontsize', fs);
-
+% %% Experiment 3: Frequency and Phase Encoding -Start 
+% disp('Experiment 3: Phase Encoding');fprintf('\n');
+% 
+% % We begin by applying a gradient in the y-direction, of one dt in duration.
+% % We vary the amplitude in fractions of a maxGy gradient amplitude(nPE=number of
+% % phase encodes), resulting in different phase accrual during that time period.
+% 
+% 
+% %% Experiment 3: Define and convert some intermediate values 
+% 
+% x__m2 = repmat(x__m, size(A,1),1);            % create spatial matrix for x gradient
+% 
+% Gy_max__mT_m = Gy_max;                        % max phase encoding gradient
+% y__m2  = repmat(y__m, 1, size(A,2));          % create spatial matrix for y gradient
+% PE     = linspace(-1,1,nPE).';                % column vector of fractional values for each PE step
+% 
+% Mtotal = zeros(nPE, ndt);                     % net complex magnetization observer
+% M = zeros(size(A,1),size(A,2),nPE,ndt);       % intermediate individual magnetization vectors
+% 
+% dw_FE_rad__s = gamma__rad_Ts * (B0__T+ x__m2 * Gx__T_m);
+% dw_PE_rad__s = gamma__rad_Ts * (B0__T+ y__m2 * Gy_max__T_m);
+% 
+% % Calculate the precesion angle for the maximum PE gradient for each
+% % y-coordinate
+% 
+% for m = 0:(nPE-1)
+% 	% Calculate the phase encoded A (effectively A that has precessed 
+% 	% about z) since the gradient occurs before frequency encoding, the
+% 	% action of the gradient can be described as a single precession
+% 	phi_rad__PE = dw_PE_rad__s * ty__s * PE(m+1);
+% 	A_PE_preFE = exp(1i*phi_rad__PE).*A;
+% 	
+% 	% Now repeat the frequency encoding experiment for each PE. Note the
+% 	% use of A_PE instead of A (a pre-phase warped version of A)
+% 	
+% 	for n = 0:(ndt-1)
+% 		phi_FE__rad = dw_FE_rad__s * dt__s * n;
+% 		Mtotal(m+1,n+1) = sum( sum( A_PE_preFE .* exp(1i*phi_FE__rad),1),2) + noise1(m+1,n+1);
+% 		M(:,:,m+1,n+1) =            A_PE_preFE .* exp(1i*phi_FE__rad);
+% 	end
+% 	
+% 
+% end
+% 
+% 
+% %% Experiment 3: Plot Encoded Vectors (after acquisition)
+% figure('Name', 'Net magnetization after Frequency and Phase Encoding');
+% colororder = 'rkbmg';
+% colororder = repmat(colororder, [1, ceil(ndt*nPE/length(colororder))+1]);
+% symbolorder = 'ox^vs';
+% symbolorder = repmat(symbolorder, [1, ceil(ndt*nPE/length(symbolorder))+1]);
+% leg_string = cell(nPE,ndt);
+% h_mn = zeros(nPE, ndt);
+% 
+% 
+% for m = 1:nPE
+% 	for n=1:ndt
+% 	
+% 		Mtmp = M(:,:,m,n).';
+% 		Mtmp = Mtmp(:);
+% 		
+% 		for j=1:length(Mtmp)
+% 			plot( [0, real( Mtmp(j)) ], [ 0 imag(Mtmp(j)) ], [colororder(n),':', symbolorder(m)]);
+% 			hold on;
+% 		end
+% 		h_mn(m,n) = plot([0, real( Mtotal(m,n)) ], [ 0 imag(Mtotal(m,n)) ], [colororder(n),'-', symbolorder(m)], ...
+% 			'linewidth', 2, 'markerfacecolor', colororder(n));
+% 		leg_string{m,n} =  ['t_{', num2str(n), '}', '-nPE=', num2str(m)];
+% 	end
+% 
+% end;
+% 
+% axis equal;
+% set(gca, 'fontsize', fs);
+% xlabel('x', 'fontsize', fs);
+% ylabel('y', 'fontsize', fs);
+% ll = sum(abs(A(:)));
+% xlim([-ll,ll]); ylim([-ll,ll]);
+% if nPE*ndt<20	
+% 	legend(h_mn(:),leg_string{:}, 'location','eastoutside');
+% 	set(h_leg, 'fontsize', fs);
+% end
+% 
+% 
+% %% Experiment 3: Recover the Image
+% 
+% % Setup the same system of equations:
+% %
+% %  Mnet             = EncodingMatrix          * Avec
+% % ( (ndt*nPE) x 1)    ((ndt*nPE) x Npixels)   * (Npixels x 1)
+% %
+% % where A_vec correspondes to the vectorized version of A(:). Each row of
+% % the encoding matrix corresponds to the phase values we imparted with the
+% % gradient above. Note that we have to expand the FE and PE ecnoding
+% % matrices to create a single encoding matrix, with one row per
+% % "combintation" of FE and PE. Hence, the EM should have size:
+% %   ndt*nPE x length(Avec)
+% 
+% 
+% %
+% % Avec = pinv(EncodingMatrix) * Mnet
+% 
+% EncodingMatrixFE =  exp( 1i * ((0:ndt-1).' * dt__s) * dw_FE_rad__s(:).' );
+% EncodingMatrixPE =  exp( 1i * (PE * ty__s) * dw_PE_rad__s(:).' );
+% 
+% EncodingMatrixPE = repmat( EncodingMatrixPE, ndt,1);
+% 
+% B = shiftdim(EncodingMatrixFE,-1);
+% C = repmat(B, [ nPE 1 1]);
+% EncodingMatrixFE = reshape(C,nPE*ndt,length(A(:)));
+% 
+% I_EncodingMatrix = pinv(EncodingMatrixFE .* EncodingMatrixPE);
+% 
+% RowReduced_EncodingMatrix = rref(EncodingMatrixFE .* EncodingMatrixPE);
+% Condition_EncodingMatrix  = cond(EncodingMatrixFE .* EncodingMatrixPE);
+% Rank_EncodingMatrix = rank (EncodingMatrixFE .* EncodingMatrixPE);
+% disp('E3: Row-reduced version of the Encoding Matrix');
+% disp(RowReduced_EncodingMatrix);
+% disp('E3: Condition number');
+% disp(Condition_EncodingMatrix);
+% disp('E3: Rank');
+% disp(Rank_EncodingMatrix);
+% 
+% Avec = I_EncodingMatrix * Mtotal(:);
+% Avec = reshape(Avec, size(A));
+% 
+% disp('E3: A as obtained by pinv (real):');
+% disp(real(Avec));
+% disp('E3: A as obtained by pinv (imag):');
+% disp(imag(Avec));
+% 
+% 
+% disp('E3: Original (real):');
+% disp(real(A));
+% disp('E3: Original (imag):');
+% disp(imag(A));
+% 
+% 
+% disp('E3: Error norm (A-Avec)');
+% disp(norm(A-Avec));
+% 
+% 
+% %% Experiment 3: Display image - recovered
+% 
+% figure('Name', 'Recovered Image');
+% h_im = imagesc(x,y,abs(Avec));
+% h_ax = ancestor(h_im, 'axes');
+% colormap(gray);
+% axis image
+% 
+% hold on;
+% ii=1;
+% for xx = 1:length(x)
+% 	for yy = 1:length(y)
+% 
+% 		plot(x(xx),y(yy), 'ro', ...
+% 			'markerfacecolor', 'r', 'markersize', 10);
+% 		text(x(xx),y(yy), ...
+% 			['A_{', num2str(ii), '}=', num2str(real(Avec(yy,xx)), '%2.2f'),' + ', num2str(imag(Avec(yy,xx)), '%2.2f'),'i'    ], ...
+% 			'Fontsize', 40/sqrt(length(A)), 'horizontalAlignment', 'Center', ...
+% 			'VerticalAlignment', 'Bottom', 'color', 'r');
+% 		ii=ii+1;
+% 	end
+% end
+% 
+% set(h_ax, 'fontsize', fs, 'clim', clim);
+% xlabel('x', 'fontsize', fs);
+% ylabel('y', 'fontsize', fs);
+% 
+% 
+% %% Experiment 3: Display image - difference
+% 
+% diff_vec = A-Avec;
+% diff_vec = diff_vec(:);
+% err = abs(max(diff_vec));
+% err_ord = ceil(log10(err));
+% 
+% f=figure('Name', ['Difference Image (max error  x 10^', num2str(err_ord),')']);
+% h_im = imagesc(x,y,abs(A-Avec));
+% h_ax = ancestor(h_im, 'axes');
+% colormap(gray);
+% axis image
+% 
+% hold on;
+% ii=1;
+% for xx = 1:length(x)
+% 	for yy = 1:length(y)
+% 
+% 		plot(x(xx),y(yy), 'ro', ...
+% 			'markerfacecolor', 'r', 'markersize', 10);
+% 		text(x(xx),y(yy), ...
+% 			['A_{', num2str(ii), '}=', num2str( abs((A(yy,xx) - Avec(yy,xx)) / 10^err_ord), 2)], ...
+% 			'Fontsize', 40/sqrt(length(A)), 'horizontalAlignment', 'Center', ...
+% 			'VerticalAlignment', 'Bottom', 'color', 'r');
+% 		ii=ii+1;
+% 	end
+% end
+% 
+% set(h_ax, 'fontsize', fs, 'clim', clim);
+% xlabel('x', 'fontsize', fs);
+% ylabel('y', 'fontsize', fs);
+% 
 
 %% Experiment 4: Encoding with the Fourier Matrix
 % We determine the phase accrual that each spin is to experience using 
@@ -833,7 +834,7 @@ n2 = 0:Ny-1;
 n2 = repmat(n2,Ny,1);
 Wy_decode = (1/Ny)*exp(-1*Wy.*n1.*n2);
 
-Arec_DFT   = Wy_decode*Wx_decode*Mtotal; 
+Arec_DFT   = ifftshift(Wy_decode)*(ifftshift(Wx_decode)*Mtotal')'; 
 Arec_ifft2 = fftshift(ifft2(ifftshift(Mtotal)));
 
 RowReduced_EncodingMatrix = rref(Wx_decode);
@@ -878,4 +879,3 @@ elseif Nx<32
 elseif Ny<32
 	PlotIdealEncodingMatrices(1,Ny);
 end
-
