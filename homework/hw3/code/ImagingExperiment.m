@@ -133,7 +133,7 @@ Achoices.Custom   = MakeAMatrix(5,5,Amp_max);
 
 %% Choose Image Matrix
 
-A = Achoices.A10_11i;		% choose one of the examples provided				
+A = Achoices.A2_3;		% choose one of the examples provided				
 
 % A = MakeAMatrix(50, 40, 15);
 % spatial coordinate matrix
@@ -719,7 +719,7 @@ disp(PEmult);
 Ex = zeros(Nx,Nx);                      % Encoding matrix, x dimension
 Ey = zeros(Ny,Ny);                      % Encoding matrix, y dimension
 
-Ex_prewind = exp(-1i*dphi_FE_prewind__rad(1,:));   % vector that represents readout prewinder phase
+Ex_prewind = exp(1i*dphi_FE_prewind__rad(1,:));   % vector that represents readout prewinder phase
 
 for m = 0:(Ny-1) % for each PE
 	% Phase encode. Since the PE occurs before FE, the
@@ -732,7 +732,7 @@ for m = 0:(Ny-1) % for each PE
 	Ey(:,m+1) = exp(-1i*phi_PE__rad(:,1)); %apply exp(-1phi) to all ys
 	
 	% Prewind the frequency encode
-	A_PE_preFE = exp(-1i*dphi_FE_prewind__rad) .* A_PE_preFE; % fcn of prev A_PE_preFE
+	A_PE_preFE = exp(+1i*dphi_FE_prewind__rad) .* A_PE_preFE; % fcn of prev A_PE_preFE
 
 	% Now repeat the frequency encoding experiment for each PE. Note the
 	% use of A_PE instead of A (a pre-phase warped version of A)
@@ -834,7 +834,8 @@ n2 = 0:Ny-1;
 n2 = repmat(n2,Ny,1);
 Wy_decode = (1/Ny)*exp(-1*Wy.*n1.*n2);
 
-Arec_DFT   = ifftshift(Wy_decode)*(ifftshift(Wx_decode)*Mtotal')'; 
+% Arec_DFT   = fftshift((Wy_decode*(Wx_decode*ifftshift(Mtotal).').'));
+Arec_DFT = fftshift( Wy_decode * ((Wx_decode * (ifftshift(Mtotal).')).'));
 Arec_ifft2 = fftshift(ifft2(ifftshift(Mtotal)));
 
 RowReduced_EncodingMatrix = rref(Wx_decode);
@@ -861,8 +862,8 @@ disp(Rank_EncodingMatrix);
 
 disp('E5: A as obtained by DFT matrix:');
 disp(num2str(Arec_DFT,'%1.1f  '));
-disp('E5: A as obtained by ifft2:');
-disp(num2str(Arec_ifft2,'%1.1f  '));
+% disp('E5: A as obtained by ifft2:');
+% disp(num2str(Arec_ifft2,'%1.1f  '));
 disp('E5: A- Original:');
 disp(num2str(A,'%1.1f  ')); 
 disp('E5: Error norm (A-Arec_DFT)');
