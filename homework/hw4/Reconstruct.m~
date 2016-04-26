@@ -1,0 +1,31 @@
+function [im, im_rss] = Reconstruct(coil_data, plot)
+
+if nargin <2 
+    plot = false;
+end
+
+im = fftshift(ifft2(ifftshift(coil_data)));
+im_rss = RSS(im);
+
+if plot 
+    figure
+    
+    colormap(gray)
+    subplot(141)
+    imagesc(log(abs(im(:,:,1))+1)); axis off; axis image
+    title('Single coil magnitude')
+
+    subplot(143)
+    imagesc(log(im_rss+1)); axis off; axis image
+    title('Single coil phase')
+
+    subplot(142)
+    imagesc(angle(im(:,:,1))); axis off; axis image
+    title('RSS magnitude')
+
+    subplot(144)
+    imagesc(abs(acos(sum(abs(im).^2.*cos(angle(im)),4)./log(im_rss).^2))); axis off; axis image
+    title('Combined phase')
+end
+
+end

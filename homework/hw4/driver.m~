@@ -1,0 +1,29 @@
+%% The one script to rule them all
+
+clear
+close all
+
+%% Reconstruction
+load('mod_raw_006_STD')
+
+
+im = fftshift(ifft2(ifftshift(fdata)));
+im_rss = RSS(im);
+
+figure
+colormap(gray)
+subplot(141)
+imagesc(log(abs(im(:,:,1))+1)); axis off; axis equal
+title('Single coil magnitude')
+
+subplot(143)
+imagesc(log(im_rss+1)); axis off; axis equal
+title('Single coil phase')
+
+subplot(142)
+imagesc(angle(im(:,:,1))); axis off; axis equal
+title('RSS magnitude')
+
+subplot(144)
+imagesc(abs(acos(sum(abs(log(im+1)).^2.*cos(angle(im)),4)./(im_rss).^2))); axis off; axis equal
+title('Combined phase')
