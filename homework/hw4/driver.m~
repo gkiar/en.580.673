@@ -4,26 +4,34 @@ clear
 close all
 
 %% Reconstruction
-load('mod_raw_006_STD')
 
+fnames = dir('*STD.mat');
+ims = {};
+ims_rms = {};
+plot = false;
 
-im = fftshift(ifft2(ifftshift(fdata)));
-im_rss = RSS(im);
+i = 1; 
+load(fnames(i).name)
+if i <= 3
+    first = true;
+else
+    first = false;
+end
+[ims{i}, ims_rms{i}] = Reconstruct(fdata, plot, first);
 
-figure
-colormap(gray)
-subplot(141)
-imagesc(log(abs(im(:,:,1))+1)); axis off; axis equal
-title('Single coil magnitude')
+figure(1)
+imagesc(log(ims_rms{i})); colormap(gray)
+fg = roipoly();
+bg = roipoly();
 
-subplot(143)
-imagesc(log(im_rss+1)); axis off; axis equal
-title('Single coil phase')
+imagesc(fg+bg);
+sloc = find(fg == 1);
+nloc = find(bg == 1);
 
-subplot(142)
-imagesc(angle(im(:,:,1))); axis off; axis equal
-title('RSS magnitude')
+sig{i} = ims_rms{i}(sloc);
+noi{i} = ims_rms{i}(nloc);
 
-subplot(144)
-imagesc(abs(acos(sum(abs(log(im+1)).^2.*cos(angle(im)),4)./(im_rss).^2))); axis off; axis equal
-title('Combined phase')
+SNR{i} = sig{i}/noi{i};
+
+% panel plot
+% title is the scan; and snr
