@@ -3,11 +3,11 @@
 ### Part 1: Image Reconstruction
 
 1. **Reconstructing the Data**
-  - [**``Reconstruct Function``**]()
-  - [**``Reconstructed Images``**]()
+  - [**``Reconstruct Function``**](./code/Reconstruct.m)
+  - [**``Reconstructed Images``**](./results/part1/scans/)
   
 2. **Measure SNR**
-  - [**``Location of ROIs``**]()
+  - [**``Location of ROIs``**](./results/part1/rois.png)
   - SNR Table:
 
 | Scan | Signal Mean | Noise STD |   SNR  |
@@ -37,7 +37,7 @@
 ### Part 2: The Noise in MRI
 
 1. **Visualzing Noise Data**
-  - [**``Phasor Images for Each Coil``**]()
+  - [**``Phasor Images for Each Coil``**](./results/part2/noise_phasors.png)
   - The noise appears to me as approximately Gaussian. The mean isn't quite centered at 0, but slightly higher, which makes sense to me as you can't quite have "negative intensity" (can you?!). The standard deviation value seems relatively uninformative to me here, as the images are on somewhat of an arbitrary intensity scale determined by the gain of the scanner. One important difference I did notice is that noise is non-uniform across the coils. I expect this is due to the location of the coils within the scanner, and heterogeneity of the B0 field causes the coils to react differently in the central, ideal, region of the scanner and the periphery, where that ideality breaks down.
 
 2. **Decomposing Noise Distributions**
