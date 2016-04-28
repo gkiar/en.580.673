@@ -36,27 +36,27 @@
   
 ### Part 2: The Noise in MRI
 
-1. **Visualzing Noise Data**
+1. **Visualzing Noise Data**  Redo with scatter instead of phasor
   - [**``Phasor Images for Each Coil``**](./results/part2/noise_phasors.png)
   - The noise appears to me as approximately Gaussian. The mean is near zero (though slightly higher) which makes sense to me as we expected 0 centered noise but there are non idealities in the gradients which I imagine increase the noise baseline. The standard deviation value seems relatively uninformative to me here, as the images are on somewhat of an arbitrary intensity scale determined by the gain of the scanner. One important difference I did notice is that noise is non-uniform across the coils. I expect this is due to the location of the coils within the scanner, and heterogeneity of the B0 field causes the coils to react differently in the central, ideal, region of the scanner and the periphery, where that ideality breaks down.
 
-2. **Decomposing Noise Distributions**
+2. **Decomposing Noise Distributions** 
   - [**``Noise Historams for Each Coil``**](./results/part2/noise_hists.png)
   - Again, the noise appears to be Gaussian to me. They do not all have the same amplitude, but as they all contain the same number of samples (i.e. the vectors are the same length), that means that those with lower amplitude have a higher standard deviation of their noise. I again think that this difference is due to the location of the coils within the scanner, and that they experience different magnetic fields based on their location which leads to different noise characteristics.
 
 
 3. **Image Space Noise**
   - [**``Noise Histograms for Each Coil``**](./results/part2/noise_fft_hists.png)
-  - What is scaling?
+  - Scaling factor inherent to the Fourier Transform. 1/sqrt(length(noise_data))
 
-4. **Complex Histograms after FFT**
-  - How is this different from above?
+4. **Complex Histograms after FFT** RSS of signal
+  - Magnitude of noise looks Raleigh/Rissian not Gaussian
 
 5. **Imaginary and Real Noise Relationship**
-  - What do we want here? What does demonstration look like in this question?
+  - We can predict in image space based on properties in frequency domain. From gaussian params, what are params of rissian
 
 6. **Distribution of noise**
-  - In class you kept saying not Gaussian though it kind of looks it; what other distribution were you expecting?
+  - use params to generate dist and compare
 
 ### Part 3: The Signal in MRI
 
