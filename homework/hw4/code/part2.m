@@ -38,6 +38,8 @@ figure
 for i =1:6
     subplot(3, 3, i)
     hist(RSS(fift(:,:,1, i)), 10000)
+    xlabel(strcat('Mean:',num2str(mean(RSS(fift(:,:,1,i)))),'; std:',num2str(std(RSS(fift(:,:,1,i))))))
 end
 subplot(3,3,9)
 hist(magfitty, 10000)
+xlabel(strcat('Mean:',num2str(mean(magfitty)),'; std:',num2str(std(magfitty))))
