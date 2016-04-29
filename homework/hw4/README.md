@@ -77,4 +77,25 @@
   - As we're now covering twice as much of k-space in the x direction, the area under our readout gradient has to double. As you're doubling Nx, and dt is being halved, your readout gradient will take the same amount of time. This means that in order to get our larger field of view, then, the amplitude of the readout gradient must double.
 
 3 **Aliasing in PE and FE**
-  - 
+  - This is because we double oversample in the readout direction, so when we reduce the FOV we preserve the image region. We cannot double oversample in the phase encode direction, so we notice ghosting/aliasing/wrap around.
+
+4 **Resolution and SNR**
+  - The SNR relationship does not seem to hold in these images. I think it is because there is a "lower bound" on SNR of the images, and as the SNR is sufficiently low/close to this posited "lower bound" here, single changes will have a minimal effect. I imagine if the images were of higher quality, the SNR relationship would hold when a similar change occured.
+  - In the case of image 25, the relationship does more closely hold as the image is of way higher quality. This backs up our theory about the previous part, as well.
+
+| Scan | Signal Mean | Noise STD |   SNR  |
+|------|-------------|-----------|--------|
+| 20   |5.9963e+04   | 3.8026e+03| 15.7689|
+| 21   |5.8248e+04   | 3.8738e+03| 15.0365|
+| 25   |             |           |        |
+
+
+5 **Bandwidth and SNR**
+  - Image bandwidths were calculated with the equation: BW1/ps1 = BW2/ps2. The image bandwidth is the pixel bandwidth times the number of pixels.
+
+| Scan | Pixel Shift | Pixel Bandwidth |  Image Bandwidth  |     dt   |   SNR   |
+|------|-------------|-----------------|-------------------|----------|---------|
+| 12   |    1        |  434 Hz         |   156240   Hz     | 6.40e-6  | 27.7393 |
+| 13   |    2        |  868 Hz         |   312480   Hz     | 3.20e-6  | 28.5246 |
+| 14   |    1.5      |  651 Hz         |   234360   Hz     | 4.27e-6  | 34.9400 |
+| 15   |    0.5      |  217 Hz         |    78120   Hz     | 1.28e-5  | 23.7827 |
