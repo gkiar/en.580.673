@@ -57,7 +57,17 @@
   - We can predict parameters of the Rician distribution in image space based on parameters of the Gaussian distribution in k-space. The relationship is given by equation 3 [here](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2254141/).
 
 6 **Distribution of noise**
-  - use params to generate dist and compare
+  - Using the parameters and equations we didn't seem to get values that very closely matched those observed - it seems that the equations over estimated the noise.
+
+|Observed Mean | Observed STD | Calc'd Mean | Calc'd STD |
+|--------------|--------------|-------------|------------|
+|    0.0458    | 0.0254       |     6.3491  | 11.0145    |
+|    0.0564    | 0.0314       |     7.8277  | 16.7420    |
+|    0.0498    | 0.0276       |     6.9068  | 13.0345    |
+|    0.0636    | 0.0354       |     8.8270  | 21.2895    |
+|    0.0666    | 0.0371       |     9.2428  | 23.3429    |
+|    0.0501    | 0.0278       |     6.9485  | 13.1924    |
+
 
 ### Part 3: The Signal in MRI
 
