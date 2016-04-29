@@ -10,10 +10,7 @@ for i = 1:6
    xm = mean(real(dat));
    xs = std(real(dat));
    
-   for j = 1:length(dat)/4
-        plot([0, real(dat(j))], [0, imag(dat(j))])
-        hold on 
-   end
+   scatter(real(dat), imag(dat), '.')
    axis([-40 40 -40 40])
    xlabel(strcat('Mean: ', num2str(xm), '; STD: ', num2str(xs)))
    ylabel(strcat('Mean: ', num2str(ym), '; STD: ', num2str(ys)))
@@ -33,12 +30,14 @@ fiftflat = [real(fift); imag(fift)]/250;
 figure
 for i = 1:6
     subplot(2, 3, i)
-    hist(fiftflat(:,1,1,i), 100)
+    hist(fiftflat(:,1,1,i), 1000)
 end
 
 magfitty = RSS(fift);
 figure
-subplot(121)
-imagesc(magfitty)
-subplot(122)
-hist(magfitty, 100)
+for i =1:6
+    subplot(3, 3, i)
+    hist(RSS(fift(:,:,1, i)), 10000)
+end
+subplot(3,3,9)
+hist(magfitty, 10000)

@@ -10,9 +10,9 @@ ims = {};
 ims_rms = {};
 plot = true;
 
-for i = 1:length(fnames)-1
+for i = 13:length(fnames)
     load(fnames(i).name)
-    if i <= 3
+    if i <= 3=
         first = true;
     else
         first = false;
