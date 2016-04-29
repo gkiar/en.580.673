@@ -36,24 +36,25 @@
   
 ### Part 2: The Noise in MRI
 
-1 **Visualzing Noise Data**  Redo with scatter instead of phasor
+1 **Visualzing Noise Data**
   - [**``Phasor Images for Each Coil``**](./results/part2/noise_phasors.png)
   - The noise appears to me as approximately Gaussian. The mean is near zero (though slightly higher) which makes sense to me as we expected 0 centered noise but there are non idealities in the gradients which I imagine increase the noise baseline. The standard deviation value seems relatively uninformative to me here, as the images are on somewhat of an arbitrary intensity scale determined by the gain of the scanner. One important difference I did notice is that noise is non-uniform across the coils. I expect this is due to the location of the coils within the scanner, and heterogeneity of the B0 field causes the coils to react differently in the central, ideal, region of the scanner and the periphery, where that ideality breaks down.
+  - We also notice that the signal is discrete, due to the hardware limitations of the ADC.
 
 2 **Decomposing Noise Distributions** 
   - [**``Noise Historams for Each Coil``**](./results/part2/noise_hists.png)
   - Again, the noise appears to be Gaussian to me. They do not all have the same amplitude, but as they all contain the same number of samples (i.e. the vectors are the same length), that means that those with lower amplitude have a higher standard deviation of their noise. I again think that this difference is due to the location of the coils within the scanner, and that they experience different magnetic fields based on their location which leads to different noise characteristics.
 
-
 3 **Image Space Noise**
   - [**``Noise Histograms for Each Coil``**](./results/part2/noise_fft_hists.png)
-  - Scaling factor inherent to the Fourier Transform. 1/sqrt(length(noise_data))
+  - The distribution does still look Guassian, though of a different amplitude. The scaling factor inherent to the Fourier Transform is 1/sqrt(length(noise_data)), so when applying this we obtain a more similarly scaled distribution.
 
-4 **Complex Histograms after FFT** RSS of signal
-  - Magnitude of noise looks Raleigh/Rissian not Gaussian
+4 **Complex Histograms after FFT**
+  - [**``Magnitude Noise images``**](./results/part2/magnitude_hists.png)
+  - Magnitude of noise looks Raleigh/Rician, not Gaussian, when we take the magnitude.
 
 5 **Imaginary and Real Noise Relationship**
-  - We can predict in image space based on properties in frequency domain. From gaussian params, what are params of rissian
+  - We can predict parameters of the Rician distribution in image space based on parameters of the Gaussian distribution in k-space. The relationship is given by equation 3 [here](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2254141/).
 
 6 **Distribution of noise**
   - use params to generate dist and compare
@@ -92,6 +93,7 @@
 
 5 **Bandwidth and SNR**
   - Image bandwidths were calculated with the equation: BW1/ps1 = BW2/ps2. The image bandwidth is the pixel bandwidth times the number of pixels.
+  - We notice that the relationship doesn't hold like we would expect. I maintain my theory of crappy images breaking down the relationship.
 
 | Scan | Pixel Shift | Pixel Bandwidth |  Image Bandwidth  |     dt   |   SNR   |
 |------|-------------|-----------------|-------------------|----------|---------|
