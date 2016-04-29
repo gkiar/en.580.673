@@ -59,6 +59,16 @@
 6 **Distribution of noise**
   - use params to generate dist and compare
 
+|Observed Mean | Observed STD | Calc'd Mean | Calc'd STD |
+|--------------|--------------|-------------|------------|
+|  857.5668    | 474.7610     |  |  |
+|  1.0560e+03  | 587.6862     |  |  |
+|    932.9619  | 516.3293     |  |  |
+|  1.1913e+03  | 662.5756     |  |  |
+|  1.2463e+03  | 695.0092     |  |  |
+|    938.1032  | 520.3146     |  |  |
+
+
 ### Part 3: The Signal in MRI
 
 1 **Averaging for SNR**
